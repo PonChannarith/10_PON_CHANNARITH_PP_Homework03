@@ -208,9 +208,8 @@ public class EmployeeManager {
                 .filter(emp -> emp.getId() == id)
                 .findFirst()
                 .ifPresentOrElse(emp -> {
-                    emp.setName(name);
-                    emp.setAddress(address);
-                    System.out.println("Employee updated successfully.");
+                    if (name != null) emp.setName(name);
+                    if (address != null) emp.setAddress(address);
                 }, () -> System.out.println("Employee not found."));
     }
 
@@ -264,7 +263,6 @@ public class EmployeeManager {
         table.addCell(employee.getClass().getSimpleName(), cellStyle);
         table.addCell(String.valueOf(employee.getId()), cellStyle);
         table.addCell(employee.getName(), cellStyle);
-
         table.addCell(employee.getAddress(), cellStyle);
 
         if (employee instanceof SalariedEmployee) {

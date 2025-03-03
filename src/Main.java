@@ -6,8 +6,14 @@ import org.nocrala.tools.texttablefmt.Table;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.regex.Pattern;
 
 public class Main {
+    private static final Pattern NAME_PATTERN = Pattern.compile("^[A-Za-z\\s]+$");
+    private static final Pattern ADDRESS_PATTERN = Pattern.compile("^[\\w\\s,.-]+$");
+    private static final Pattern NUMBER_PATTERN = Pattern.compile("^\\d+(\\.\\d{1,2})?$");
+    private static final Pattern HOURS_PATTERN = Pattern.compile("^\\d{1,3}$");
+
     public static void main(String[] args) throws IOException {
         EmployeeManager manager = new EmployeeManager();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -53,47 +59,43 @@ public class Main {
     private static void insertEmployee(EmployeeManager manager, BufferedReader reader) throws IOException {
         int typeOption;
         do {
+            CellStyle cellStyle1 = new CellStyle(CellStyle.HorizontalAlign.CENTER);
+            Table table1 = new Table(4, BorderStyle.UNICODE_BOX_DOUBLE_BORDER, ShownBorders.ALL);
             System.out.println("Choose type:");
-            System.out.println("1. Volunteer");
-            System.out.println("2. Salaried Employee");
-            System.out.println("3. Hourly Employee");
-            System.out.println("4. Back");
+            table1.addCell("1. Volunteer", cellStyle1);
+            table1.addCell("2. Salaried Employee", cellStyle1);
+            table1.addCell("3. Hourly Employee", cellStyle1);
+            table1.addCell("4. Back", cellStyle1);
+            table1.setColumnWidth(0, 20, 20);
+            table1.setColumnWidth(1, 30, 30);
+            table1.setColumnWidth(2, 20, 20);
+            table1.setColumnWidth(3, 20, 20);
+            System.out.println(table1.render());
             System.out.print("=> Enter type of number: ");
             typeOption = Integer.parseInt(reader.readLine());
 
             switch (typeOption) {
                 case 1:
                     System.out.println("ID: " + Volunteer.idCounter);
-                    System.out.print("Enter Name: ");
-                    String name = reader.readLine();
-                    System.out.print("Enter Address: ");
-                    String address = reader.readLine();
-                    System.out.print("Enter Salary: ");
-                    double salary = Double.parseDouble(reader.readLine());
+                    String name = validateInput(reader, "Enter Name: ", NAME_PATTERN);
+                    String address = validateInput(reader, "Enter Address: ", ADDRESS_PATTERN);
+                    double salary = Double.parseDouble(validateInput(reader, "Enter Salary: ", NUMBER_PATTERN));
                     manager.addEmployee(new Volunteer(name, address, salary));
                     break;
                 case 2:
                     System.out.println("ID: " + SalariedEmployee.idCounter);
-                    System.out.print("Enter Name: ");
-                    name = reader.readLine();
-                    System.out.print("Enter Address: ");
-                    address = reader.readLine();
-                    System.out.print("Enter Salary: ");
-                    salary = Double.parseDouble(reader.readLine());
-                    System.out.print("Enter Bonus: ");
-                    double bonus = Double.parseDouble(reader.readLine());
+                    name = validateInput(reader, "Enter Name: ", NAME_PATTERN);
+                    address = validateInput(reader, "Enter Address: ", ADDRESS_PATTERN);
+                    salary = Double.parseDouble(validateInput(reader, "Enter Salary: ", NUMBER_PATTERN));
+                    double bonus = Double.parseDouble(validateInput(reader, "Enter Bonus: ", NUMBER_PATTERN));
                     manager.addEmployee(new SalariedEmployee(name, address, salary, bonus));
                     break;
                 case 3:
                     System.out.println("ID: " + StaffMember.idCounter);
-                    System.out.print("Enter Name: ");
-                    name = reader.readLine();
-                    System.out.print("Enter Address: ");
-                    address = reader.readLine();
-                    System.out.print("Enter Hours Worked: ");
-                    int hoursWorked = Integer.parseInt(reader.readLine());
-                    System.out.print("Enter Rate: ");
-                    double rate = Double.parseDouble(reader.readLine());
+                    name = validateInput(reader, "Enter Name: ", NAME_PATTERN);
+                    address = validateInput(reader, "Enter Address: ", ADDRESS_PATTERN);
+                    int hoursWorked = Integer.parseInt(validateInput(reader, "Enter Hours Worked: ", HOURS_PATTERN));
+                    double rate = Double.parseDouble(validateInput(reader, "Enter Rate: ", NUMBER_PATTERN));
 
                     HourlySalaryEmployee employee = new HourlySalaryEmployee(name, address, hoursWorked, rate);
                     manager.addEmployee(employee);
@@ -112,16 +114,11 @@ public class Main {
         int id = Integer.parseInt(reader.readLine());
         System.out.println("Updated Employee Data:");
         manager.displayEmployeeById(id);
-//        System.out.println("Search by id to update successfully ");
-        // Check if the employee exists
-
 
         StaffMember employee = manager.getEmployeeById(id);
 
-        // Display the employee's current data in a formatted table
         System.out.println("================= Update Employee =================");
         Table table = new Table(6, BorderStyle.UNICODE_BOX_HEAVY_BORDER, ShownBorders.ALL);
-
 
         if (employee instanceof Volunteer) {
             Volunteer volunteer = (Volunteer) employee;
@@ -151,7 +148,6 @@ public class Main {
 
         System.out.println(table.render());
 
-        // Update options
         System.out.println("Choose one column to update:");
         System.out.println("1. Name");
         System.out.println("2. Address");
@@ -167,34 +163,29 @@ public class Main {
 
         switch (columnOption) {
             case 1:
-                System.out.print("Change name to: ");
-                String name = reader.readLine();
+                String name = validateInput(reader, "Change name to: ", NAME_PATTERN);
                 manager.updateEmployee(id, name, null);
                 System.out.println("Name updated successfully.");
                 break;
             case 2:
-                System.out.print("Change address to: ");
-                String address = reader.readLine();
+                String address = validateInput(reader, "Change address to: ", ADDRESS_PATTERN);
                 manager.updateEmployee(id, null, address);
                 System.out.println("Address updated successfully.");
                 break;
             case 3:
                 if (employee instanceof HourlySalaryEmployee) {
-                    System.out.print("Change hours worked to: ");
-                    int hoursWorked = Integer.parseInt(reader.readLine());
+                    int hoursWorked = Integer.parseInt(validateInput(reader, "Change hours worked to: ", HOURS_PATTERN));
                     ((HourlySalaryEmployee) employee).setHoursWorked(hoursWorked);
                     System.out.println("Hours worked updated successfully.");
                 } else {
-                    System.out.print("Change salary to: ");
-                    double salary = Double.parseDouble(reader.readLine());
+                    double salary = Double.parseDouble(validateInput(reader, "Change salary to: ", NUMBER_PATTERN));
                     manager.updateEmployeeSalary(id, salary);
                     System.out.println("Salary updated successfully.");
                 }
                 break;
             case 4:
                 if (employee instanceof HourlySalaryEmployee) {
-                    System.out.print("Change rate to: ");
-                    double rate = Double.parseDouble(reader.readLine());
+                    double rate = Double.parseDouble(validateInput(reader, "Change rate to: ", NUMBER_PATTERN));
                     ((HourlySalaryEmployee) employee).setRate(rate);
                     System.out.println("Rate updated successfully.");
                 } else {
@@ -209,7 +200,6 @@ public class Main {
                 return;
         }
 
-        // Display the updated employee data
         System.out.println("Updated Employee Data:");
         manager.displayEmployeeById(id);
     }
@@ -218,5 +208,17 @@ public class Main {
         System.out.print("Enter ID to remove: ");
         int id = Integer.parseInt(reader.readLine());
         manager.removeEmployee(id);
+    }
+
+    private static String validateInput(BufferedReader reader, String prompt, Pattern pattern) throws IOException {
+        String input;
+        do {
+            System.out.print(prompt);
+            input = reader.readLine();
+            if (!pattern.matcher(input).matches()) {
+                System.out.println("Invalid input. Please try again.");
+            }
+        } while (!pattern.matcher(input).matches());
+        return input;
     }
 }
