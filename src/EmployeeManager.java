@@ -14,6 +14,7 @@ public class EmployeeManager {
     String cyanBold = "\u001B[1;36m";
     String green = "\u001B[32m"; // Green
     String red = "\033[31m";   // Red color code;
+
     private final List<StaffMember> employees = new ArrayList<>();
 
     // Add an employee to the list
@@ -24,6 +25,7 @@ public class EmployeeManager {
 
     // Display all employees in a formatted table
     public void displayEmployee() {
+        // Employee Manager
         System.out.println("========================Display all information of employee=========================");
         CellStyle cellStyle1 = new CellStyle(CellStyle.HorizontalAlign.CENTER);
         Table table1 = new Table(9, BorderStyle.UNICODE_BOX_DOUBLE_BORDER, ShownBorders.ALL);

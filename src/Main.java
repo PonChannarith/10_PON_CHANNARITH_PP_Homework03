@@ -14,12 +14,23 @@ public class Main {
     private static final Pattern NUMBER_PATTERN = Pattern.compile("^\\d+(\\.\\d{1,2})?$");
     private static final Pattern HOURS_PATTERN = Pattern.compile("^\\d{1,3}$");
 
+
     public static void main(String[] args) throws IOException {
         EmployeeManager manager = new EmployeeManager();
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         int option;
-
+        String reset = "\u001B[0m";
+        String cyanBold = "\u001B[1;36m";
+        String green = "\u001B[32m"; // Green
+        String red = "\033[31m";   // Red color code;
+        System.out.println(cyanBold+ "".repeat(30)+" ███████╗███╗   ███╗██████╗ ██╗      ██████╗ ██╗   ██╗███████╗███████╗    ███╗   ███╗ █████╗ ███╗   ██╗ █████╗  ██████╗ ███████╗███╗   ███╗███████╗███╗   ██╗████████╗    ███████╗██╗   ██╗███████╗████████╗███████╗███╗   ███╗"+reset);
+        System.out.println(cyanBold+ "".repeat(30)+" ██╔════╝████╗ ████║██╔══██╗██║     ██╔═══██╗╚██╗ ██╔╝██╔════╝██╔════╝    ████╗ ████║██╔══██╗████╗  ██║██╔══██╗██╔════╝ ██╔════╝████╗ ████║██╔════╝████╗  ██║╚══██╔══╝    ██╔════╝╚██╗ ██╔╝██╔════╝╚══██╔══╝██╔════╝████╗ ████║"+reset);
+        System.out.println(cyanBold+ "".repeat(30)+" █████╗  ██╔████╔██║██████╔╝██║     ██║   ██║ ╚████╔╝ █████╗  █████╗      ██╔████╔██║███████║██╔██╗ ██║███████║██║  ███╗█████╗  ██╔████╔██║█████╗  ██╔██╗ ██║   ██║       ███████╗ ╚████╔╝ ███████╗   ██║   █████╗  ██╔████╔██║"+reset);
+        System.out.println(cyanBold+ "".repeat(30)+" ██╔══╝  ██║╚██╔╝██║██╔═══╝ ██║     ██║   ██║  ╚██╔╝  ██╔══╝  ██╔══╝      ██║╚██╔╝██║██╔══██║██║╚██╗██║██╔══██║██║   ██║██╔══╝  ██║╚██╔╝██║██╔══╝  ██║╚██╗██║   ██║       ╚════██║  ╚██╔╝  ╚════██║   ██║   ██╔══╝  ██║╚██╔╝██"+reset);
+        System.out.println(cyanBold+ "".repeat(30)+" ███████╗██║ ╚═╝ ██║██║     ███████╗╚██████╔╝   ██║   ███████╗███████╗    ██║ ╚═╝ ██║██║  ██║██║ ╚████║██║  ██║╚██████╔╝███████╗██║ ╚═╝ ██║███████╗██║ ╚████║   ██║       ███████║   ██║   ███████║   ██║   ███████╗██║ ╚═╝ ██║"+reset);
+        System.out.println(cyanBold+ "".repeat(30)+" ╚══════╝╚═╝     ╚═╝╚═╝     ╚══════╝ ╚═════╝    ╚═╝   ╚══════╝╚══════╝    ╚═╝     ╚═╝╚═╝  ╚═╝╚═╝  ╚═══╝╚═╝  ╚═╝ ╚═════╝ ╚══════╝╚═╝     ╚═╝╚══════╝╚═╝  ╚═══╝   ╚═╝       ╚══════╝   ╚═╝   ╚══════╝   ╚═╝   ╚══════╝╚═╝     ╚═╝"+reset);
         do {
+
             CellStyle cellStyle = new CellStyle(CellStyle.HorizontalAlign.CENTER);
             Table table = new Table(1, BorderStyle.UNICODE_BOX_HEAVY_BORDER, ShownBorders.ALL);
             table.addCell("STAFF MANAGEMENT", cellStyle);
